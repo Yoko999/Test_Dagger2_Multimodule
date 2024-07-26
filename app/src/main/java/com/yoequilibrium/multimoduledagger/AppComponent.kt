@@ -3,10 +3,9 @@ package com.yoequilibrium.multimoduledagger
 import android.content.Context
 import com.yoequilibrium.multimoduledagger.core.CoreModule
 import com.yoequilibrium.multimoduledagger.data.DataModule
-import com.yoequilibrium.multimoduledagger.network.NetworkModule
+import com.yoequilibrium.multimoduledagger.data.Database
 import com.yoequilibrium.multimoduledagger.task.TaskComponent
-import com.yoequilibrium.multimoduledagger.task.TaskFragment
-import com.yoequilibrium.multimoduledagger.task.TaskModule
+import com.yoequilibrium.multimoduledagger.task.TaskComponentDependencies
 import dagger.BindsInstance
 import dagger.Component
 
@@ -28,7 +27,7 @@ import dagger.Component
  * Вместо использования AppComponent мы создадим для модуля task отдельный компонент. У нас два варианта: сделать этот компонент саб-компонентом для AppComponent или отдельным компонентом (не саб).
  */
 @Component(modules = [DataModule::class, CoreModule::class/*, NetworkModule::class, TaskModule::class*/])
-interface AppComponent:TaskComponent {
+interface AppComponent: TaskComponentDependencies {
     //fun injectTasksActivity(tasksActivity: TasksActivity)
     //override fun injectTasksFragment(tasksFragment: TaskFragment)
 
@@ -39,8 +38,13 @@ interface AppComponent:TaskComponent {
      * А значит, создание всех объектов до сих пор происходит в app модуле.
      * Т.е. создание сабкомпонента в отдельном модуле (task) не переносит код создания объектов в этот модуль.
      * Объекты сабкомпонента создаются в том же модуле (app), где находится компонент-родитель.
+     *
+     *
+     *Сабкомпонент знает про свой родительский компонент и может брать от него нужные ему объекты.
      * */
-    fun createTaskComponent(): TaskComponent
+    //fun createTaskComponent(): TaskComponent
+
+    override fun getDatabase(): Database
 
     @Component.Factory
     interface AppComponentFactory {

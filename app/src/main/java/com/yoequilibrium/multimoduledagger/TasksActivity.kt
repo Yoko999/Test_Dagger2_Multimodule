@@ -13,6 +13,6 @@ class TasksActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        (applicationContext as App).appComponent.injectTasksActivity(this)
+        //(applicationContext as App).appComponent.injectTasksActivity(this)
     }
 }

@@ -28,8 +28,13 @@ class TaskFragment:Fragment() {
      * теперь Мы все также получаем Application объект через context.applicationContext. Но теперь мы этот класс приводим не к App (из app), а к TaskComponentProvider (из task). А от него уже получаем компонент, но не как AppComponent (из app), а как TaskComponent (из task). И далее выполняем инджект.*/
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (context.applicationContext as TaskComponentProvider)
+        /*(context.applicationContext as TaskComponentProvider)
             .getTaskComponent()
-            .injectTasksFragment(this)
+            .injectTasksFragment(this)*/
+
+        val taskComponentDependencies = (context.applicationContext as TaskComponentDependenciesProvider)
+                                        .getTaskComponentDependencies()
+        val taskComponent = MyTaskComponent(taskComponentDependencies)
+        taskComponent.injectTasksFragment(this)
     }
 }

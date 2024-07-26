@@ -4,10 +4,8 @@ import android.content.Context
 import com.yoequilibrium.multimoduledagger.core.CoreModule
 import com.yoequilibrium.multimoduledagger.data.DataModule
 import com.yoequilibrium.multimoduledagger.data.Database
-import com.yoequilibrium.multimoduledagger.network.NetworkModule
+import com.yoequilibrium.multimoduledagger.task.MyTaskComponent
 import com.yoequilibrium.multimoduledagger.task.TaskComponent
-import com.yoequilibrium.multimoduledagger.task.TaskFragment
-import com.yoequilibrium.multimoduledagger.task.TaskModule
 
 /**
  * Created by yo on 26.07.2024
@@ -20,10 +18,14 @@ class MyAppComponent(private val context: Context): AppComponent {
     private val dataModule = DataModule()
     private val coreModule = CoreModule()
 
-    private val networkModule = NetworkModule()
-    private val taskModule = TaskModule()
+    /*private val networkModule = NetworkModule()
+    private val taskModule = TaskModule()*/
 
-    fun getDatabase(): Database {
+    /*fun getDatabase(): Database {
+        return dataModule.provideDatabase(context, coreModule.provideFileManager())
+    }*/
+
+    override fun getDatabase(): Database {
         return dataModule.provideDatabase(context, coreModule.provideFileManager())
     }
 
@@ -39,24 +41,24 @@ class MyAppComponent(private val context: Context): AppComponent {
         tasksActivity.database = dataModule.provideDatabase(context, coreModule.provideFileManager())
     }*/
 
-    override fun createTaskComponent(): TaskComponent {
+    /*override fun createTaskComponent(): TaskComponent {
         return MyTaskComponent(this)
-    }
+    }*/
 
     /**Если фрагмент просто использует репозиторий, то компоненту его приходится собирать. Для этого ему нужны TaskApi, Database и FileManager.
      * Поэтому app зависит от data, network и core.*/
-    override fun injectTasksFragment(tasksFragment: TaskFragment) {
+    /*override fun injectTasksFragment(tasksFragment: TaskFragment) {
         tasksFragment.taskRepository = taskModule.provideTaskRepository(
             dataModule.provideDatabase(context, coreModule.provideFileManager()),
             networkModule.provideTaskApi()
         )
         //dataModule.provideDatabase(context, coreModule.provideFileManager())
-    }
+    }*/
 
     /**В даггере класс сабкомпонента генерируется внутри класса компонента-родителя. Мы делаем так же.
      * У сабкомпонента есть доступ к компоненту-родителю. Именно так сабкомпонент получает Database для создания репозитория.
      * Если бы даггер создал класс сабкомпонента в модуле task, то такой сабкомпонент просто не смог бы использовать свой родительский компонент из модуля app для получения объектов. */
-    private class MyTaskComponent(
+    /*private class MyTaskComponent(
         private val myAppComponent: MyAppComponent,
         private val networkModule: NetworkModule = NetworkModule(),
         private val taskModule: TaskModule = TaskModule()) : TaskComponent {
@@ -64,5 +66,5 @@ class MyAppComponent(private val context: Context): AppComponent {
         override fun injectTasksFragment(tasksFragment: TaskFragment) {
             tasksFragment.taskRepository = taskModule.provideTaskRepository(myAppComponent.getDatabase(), networkModule.provideTaskApi())
         }
-    }
+    }*/
 }

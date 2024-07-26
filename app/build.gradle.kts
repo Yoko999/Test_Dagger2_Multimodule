@@ -37,7 +37,7 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":core"))
     implementation(project(":task"))
-    implementation(project(":network"))
+    //implementation(project(":network"))
 
     implementation("com.google.dagger:dagger:2.48")
     kapt("com.google.dagger:dagger-compiler:2.48")
